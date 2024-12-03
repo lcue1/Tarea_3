@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">create_account_bank</string>
+    <string name="title">Welcome to XYZ bank</string>
+    <string name="subTitle">Register!</string>
+    <!--Edit text -->
+    <string name="registerName">Name!</string>
+    <string name="registerCI">Identification card!</string>
+    <string name="hintName">Enter name</string>
+    <string name="hintCi">Enter CI</string>
+    <!--Radio buttos -->
+    <string name="typeAcount">Type Account!</string>
+    <string name="savingAcount">Saving!</string>
+    <string name="checkingAcount">Checking!</string>
+    <!--Butons -->
+    <string name="btnRegister">Go!!</string>
+
+
+</resources>

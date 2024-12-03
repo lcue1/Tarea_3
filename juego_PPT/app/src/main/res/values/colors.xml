@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- App -->
+    <color name="bgActivity">#000000</color>
+    <color name="green1">#89BF24</color>
+
+    <color name="bgSecundary">#8C8C8C</color>
+</resources>

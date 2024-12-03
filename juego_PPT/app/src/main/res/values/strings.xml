@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Juego_PPT</string>
+
+    <!-- Score gamer and pc -->
+    <string name="titleScore">Marcador </string>
+    <string name="scoreAndroid">Android : </string>
+    <string name="scoreGamer">Tu: </string>
+    <string name="todo">TODO</string>
+    <!-- Image hand, scissors, rock c -->
+    <string name="descriptionImage">TODO</string>
+
+
+    <!-- Buttons game c -->
+    <string name="btnStartEnd">Empezar</string>
+    <string name="btnStadistics">Estadisticas</string>
+</resources>

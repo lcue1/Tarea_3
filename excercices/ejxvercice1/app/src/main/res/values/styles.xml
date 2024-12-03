@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="basicStyle">
+        <item name="android:textColor">#780C0C</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginVertical">20dp</item>
+    </style>
+
+    <style name="titleText" parent="basicStyle">
+        <item name="android:textSize">35sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+    <style name="subtitle" parent="basicStyle">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+
+    <!--Buttons-->
+    <style name="buton" parent="basicStyle">
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <!-- Button -->
+    <style name="buttons">
+        <item name="backgroundTint">#780C0C</item>
+    </style>
+</resources>
+
+
