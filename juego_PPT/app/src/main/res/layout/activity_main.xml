@@ -56,19 +56,23 @@
 
     >
     <ImageView
-        android:id="@+id/gamerSelection"
+        android:id="@+id/gameImgSelection"
         android:layout_width="132dp"
         android:layout_height="194dp"
-        android:contentDescription="@string/descriptionImage"
         app:srcCompat="@drawable/hand"
         />
+    <View
+        android:layout_width="5dp"
+        android:layout_height="wrap_content"
+        android:background="@color/bgSecundary"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        />
     <ImageView
-        android:id="@+id/gamerSelector"
+        android:id="@+id/androidImgSelection"
         android:layout_width="132dp"
         android:layout_height="194dp"
-        android:contentDescription="@string/descriptionImage"
         app:srcCompat="@drawable/interrogation"
-        android:layout_marginStart="100dp"
         />
 
 </LinearLayout>
@@ -81,7 +85,7 @@
     android:layout_weight="1"
     >
     <Button
-        android:id="@+id/btnStartExit"
+        android:id="@+id/btnStartStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btnStartEnd"

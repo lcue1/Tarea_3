@@ -13,10 +13,12 @@ class MainActivity : AppCompatActivity() {
     //Atrubutes
     lateinit var scoreGamer:TextView
     lateinit var scoreAndroid:TextView
-    lateinit var gamerSelection:ImageView
-    lateinit var pcSelector:ImageView
-    lateinit var btnStartExit:Button
+    lateinit var gameImgSelection:ImageView
+    lateinit var androidImgSelection:ImageView
+    lateinit var btnStartStop:Button
     lateinit var btnStadistics:Button
+
+    lateinit var handleButtons:HandleButtons
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,5 +29,22 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        initializeProperties()
+
     }
+
+
+    private fun initializeProperties() {
+        scoreGamer=findViewById(R.id.scoreGamer)
+        scoreAndroid=findViewById(R.id.scoreAndroid)
+
+        gameImgSelection=findViewById(R.id.gameImgSelection)
+        androidImgSelection=findViewById(R.id.androidImgSelection)
+
+        btnStartStop=findViewById(R.id.btnStartStop)
+        btnStadistics=findViewById(R.id.btnStadistics)
+
+        handleButtons=HandleButtons(this,btnStartStop,btnStadistics,gameImgSelection,androidImgSelection)
+    }
+
 }
