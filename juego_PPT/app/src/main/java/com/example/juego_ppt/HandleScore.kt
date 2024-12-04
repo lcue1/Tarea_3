@@ -1,6 +1,5 @@
 package com.example.juego_ppt
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -16,64 +15,82 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-
+// Class to handle button events and game logic
 class HandleButtons(
-    private val context:Context,
-    val btnStartStop: Button,
-    private val btnStadistics: Button,
-    private val gameImgSelection: ImageView,
-    private val androidImgSelection: ImageView
+    private val context: Context, // Application context
+    private val scoreGamer: TextView, // TextView to display gamer's score
+    private val scoreAndroid: TextView, // TextView to display Android's score
+    val btnStartStop: Button, // Button to start/stop the game
+    private val btnReset: Button, // Button to reset the game
+    private val gameImgSelection: ImageView, // ImageView for gamer's selected image
+    private val androidImgSelection: ImageView // ImageView for Android's selected image
 ) {
-    private var isRunning=false
-    private val playGame=PlayGame(context,gameImgSelection, androidImgSelection)
+    // Attributes
+    private var isRunning = false // Flag to check if the game is running
+    private var score = Score(context, scoreGamer, scoreAndroid) // Manage game scores
+    private val playGame = PlayGame(context, gameImgSelection, androidImgSelection, score) // Game logic
 
     init {
-        this.addEventListenerStartStop()
+        // Initialize event listeners for buttons
+        this.addEventListenerStartStopBtn()
+        this.addEventListenerResetBtn()
     }
-    private fun addEventListenerStartStop(){
+
+    // Set up event listener for the Start/Stop button
+    private fun addEventListenerStartStopBtn() {
         this.btnStartStop.setOnClickListener {
+            // Toggle game state and update UI
             changeCharts()
-
         }
     }
 
+    // Set up event listener for the Reset button
+    private fun addEventListenerResetBtn() {
+        btnReset.setOnClickListener {
+            score.resetScore() // Reset scores
+        }
+    }
 
+    // Change game state and update UI
     private fun changeCharts() {
-        this.isRunning=!this.isRunning
-        if (this.isRunning){
-            this.btnStartStop.setBackgroundColor(ContextCompat.getColor(context, R.color.btnStop))
-            this.btnStartStop.text="Detener"
-            playGame.generateTransitioImg()
-            this.addEventListenergameImgSelection()
-            btnStadistics.isEnabled=false
-        }else{
+        this.isRunning = !this.isRunning // Toggle running state
+        if (this.isRunning) { // If game starts
+            this.btnStartStop.setBackgroundColor(ContextCompat.getColor(context, R.color.red))
+            this.btnStartStop.text = "Detener" // Change button text to "Stop"
+            playGame.generateTransitioImg() // Start changing images
+            this.addEventListenergameImgSelection() // Enable image selection
+            btnReset.isEnabled = false // Disable reset button
+        } else { // If game stops
             this.btnStartStop.setBackgroundColor(ContextCompat.getColor(context, R.color.green1))
-            this.btnStartStop.text="Empezar"
-            playGame.stopGenerating()
-            removeEventListenergameImgSelection()
-            btnStadistics.isEnabled=true
-
+            this.btnStartStop.text = "Jugar" // Change button text to "Play"
+            playGame.stopGenerating() // Stop changing images
+            removeEventListenergameImgSelection() // Disable image selection
+            btnReset.isEnabled = true // Enable reset button
         }
-
-
     }
 
+    // Enable click listener for game image selection
     private fun addEventListenergameImgSelection() {
-        gameImgSelection.setOnClickListener{
-            playGame.resultGame()
-            this.changeCharts()
+        gameImgSelection.setOnClickListener {
+            playGame.resultGame() // Determine the game result
+            this.changeCharts() // Stop the game
         }
     }
 
+    // Remove click listener for game image selection
     private fun removeEventListenergameImgSelection() {
         gameImgSelection.setOnClickListener(null)
     }
-
-
 }
 
-
-class PlayGame(private val context: Context, private val gameImgSelection: ImageView, private val androidImgSelection: ImageView) {
+// Class to control game logic
+class PlayGame(
+    private val context: Context, // Application context
+    private val gameImgSelection: ImageView, // Gamer's image selection
+    private val androidImgSelection: ImageView, // Android's image selection
+    private val score: Score // Game score manager
+) {
+    // List of drawable images for hand gestures
     private val handImages = listOf(
         ContextCompat.getDrawable(context, R.drawable.hand),
         ContextCompat.getDrawable(context, R.drawable.rock),
@@ -81,72 +98,104 @@ class PlayGame(private val context: Context, private val gameImgSelection: Image
         ContextCompat.getDrawable(context, R.drawable.interrogation),
     )
 
-    private var job: Job? = null
-    private var positionImageGamerSelected=0
-    private  var positionImageAndroidSelected:Int? = null
+    private var job: Job? = null // Coroutine job to handle image transitions
+    private var positionImageGamerSelected = 0 // Gamer's selected image index
+    private var positionImageAndroidSelected: Int? = null // Android's selected image index
+
+    // Start generating random images
     fun generateTransitioImg() {
         job = CoroutineScope(Dispatchers.Main).launch {
             while (isActive) {
-                addImgeInImageText(gameImgSelection, handImages[positionImageGamerSelected])
-                delay(1000) // Wait for 2 seconds
-                positionImageGamerSelected+=1
-                if(positionImageGamerSelected==3) positionImageGamerSelected=0
+                addImgeInImageText(gameImgSelection, handImages[positionImageGamerSelected]) // Show current image
+                delay(1000) // Wait 1 second
+                positionImageGamerSelected += 1
+                if (positionImageGamerSelected == 3) positionImageGamerSelected = 0 // Reset index
             }
         }
     }
 
-    fun resultGame(){
-        Log.d("gamer figure",positionImageGamerSelected.toString())
-        positionImageAndroidSelected=(0..2).random()
-        Log.d("android figure",positionImageAndroidSelected.toString())
-        this.stopGenerating()
-        this.addImgeInImageText(androidImgSelection, handImages[positionImageAndroidSelected!!])
-        var title="Vuelve a intentar!"
-        var message="Perdiste..."
-        if(positionImageGamerSelected==positionImageAndroidSelected){
-            title="Felicitaciones!"
-            message="Ganaste!"
+    // Determine the game result
+    fun resultGame() {
+        Log.d("gamer figure", positionImageGamerSelected.toString())
+        positionImageAndroidSelected = (0..2).random() // Random Android selection
+        Log.d("android figure", positionImageAndroidSelected.toString())
+        this.stopGenerating() // Stop image transitions
+        this.addImgeInImageText(androidImgSelection, handImages[positionImageAndroidSelected!!]) // Show Android's choice
+
+        // Determine winner
+        var title = "Vuelve a intentar!"
+        var message = "Perdiste..."
+        if (positionImageGamerSelected == positionImageAndroidSelected) { // Gamer wins
+            title = "Felicitaciones!"
+            message = "Ganaste!"
+            score.setScorePlayers("Gamer")
+        } else { // Android wins
+            score.setScorePlayers("Android")
         }
+
+        // Show result dialog
         CoroutineScope(Dispatchers.Main).launch {
-            delay(2000) // Pause for 3 seconds (3000 milliseconds)
-            showWinDialog(context,title,message)
-            resetGame()
+            delay(1000) // Pause 1 second
+            showWinDialog(context, title, message) // Display result
+            resetGame() // Reset game state
         }
     }
-    fun addImgeInImageText(imageView:ImageView,img:Drawable?){
+
+    // Update image in ImageView
+    fun addImgeInImageText(imageView: ImageView, img: Drawable?) {
         imageView.setImageDrawable(img)
-
     }
-     fun stopGenerating() {
+
+    // Stop image transitions
+    fun stopGenerating() {
         job?.cancel()
-        job = null // Reset job after stopping
+        job = null
     }
 
+    // Reset game state
     fun resetGame() {
-         positionImageGamerSelected=0
-         positionImageAndroidSelected = null
-        addImgeInImageText(androidImgSelection, handImages[3])
+        positionImageGamerSelected = 0
+        positionImageAndroidSelected = null
+        addImgeInImageText(androidImgSelection, handImages[3]) // Reset Android image
+    }
+}
 
+// Class to manage game scores
+class Score(
+    val context: Context, // Application context
+    private val scoreGamer: TextView, // TextView for gamer's score
+    private val scoreAndroid: TextView // TextView for Android's score
+) {
+    var gamerPoints = 0 // Gamer's points
+    var androidPoints = 0 // Android's points
+
+    // Update scores
+    fun setScorePlayers(playerName: String) {
+        if (playerName == "Gamer") {
+            gamerPoints += 1
+            scoreGamer.text = "Tu: $gamerPoints"
+        } else {
+            androidPoints += 1
+            scoreAndroid.text = "Android: $androidPoints"
+        }
     }
 
+    // Reset scores
+    fun resetScore() {
+        scoreGamer.text = "Tu: "
+        scoreAndroid.text = "Android: "
+        gamerPoints = 0
+        androidPoints = 0
+    }
 }
 
-
-
-class Score(val context: Context,
-                 val scoreGamer: TextView,
-                 val pcImgSelection: ImageView,){
-
-}
-
-
-
-fun showWinDialog(context: Context,title:String,message:String) {
+// Show a dialog to display the game result
+fun showWinDialog(context: Context, title: String, message: String) {
     val dialogBuilder = AlertDialog.Builder(context)
     dialogBuilder.setTitle(title)
         .setMessage(message)
         .setPositiveButton("OK") { dialog, _ ->
-            dialog.dismiss() // Dismiss the dialog when the OK button is clicked
+            dialog.dismiss() // Close dialog on OK
         }
 
     val dialog = dialogBuilder.create()

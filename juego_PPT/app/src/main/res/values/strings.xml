@@ -12,5 +12,5 @@
 
     <!-- Buttons game c -->
     <string name="btnStartEnd">Jugar</string>
-    <string name="btnStadistics">Estadisticas</string>
+    <string name="btnReset">Reiniciar</string>
 </resources>

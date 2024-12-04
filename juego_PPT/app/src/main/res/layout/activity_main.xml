@@ -93,11 +93,11 @@
         style="@style/btn"
         />
     <Button
-        android:id="@+id/btnStadistics"
+        android:id="@+id/btnReset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btnStartEnd"
-        style="@style/btn"
+        android:text="@string/btnReset"
+        style="@style/btnReset"
         />
 </LinearLayout>
 

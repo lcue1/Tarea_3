@@ -15,6 +15,9 @@
         <item name="android:textSize">@dimen/btnTextSize</item>
         <item name="android:backgroundTint">@color/green1</item>
     </style>
+    <style name="btnReset" parent="btn">
+        <item name="android:backgroundTint">@color/red</item>
+    </style>
 
 
 </resources>

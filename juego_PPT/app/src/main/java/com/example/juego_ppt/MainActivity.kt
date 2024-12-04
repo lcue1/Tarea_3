@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var gameImgSelection:ImageView
     lateinit var androidImgSelection:ImageView
     lateinit var btnStartStop:Button
-    lateinit var btnStadistics:Button
+    lateinit var btnReset:Button
 
     lateinit var handleButtons:HandleButtons
 
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initializeProperties() {
+        //Init views
         scoreGamer=findViewById(R.id.scoreGamer)
         scoreAndroid=findViewById(R.id.scoreAndroid)
 
@@ -42,9 +43,14 @@ class MainActivity : AppCompatActivity() {
         androidImgSelection=findViewById(R.id.androidImgSelection)
 
         btnStartStop=findViewById(R.id.btnStartStop)
-        btnStadistics=findViewById(R.id.btnStadistics)
-
-        handleButtons=HandleButtons(this,btnStartStop,btnStadistics,gameImgSelection,androidImgSelection)
+        btnReset=findViewById(R.id.btnReset)
+        //Init Object that managger app
+        handleButtons=HandleButtons(this,
+            scoreGamer ,
+            scoreAndroid,
+            btnStartStop,btnReset,
+            gameImgSelection,
+            androidImgSelection)
     }
 
 }
